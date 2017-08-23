@@ -1,0 +1,20 @@
+{ 
+	"commands": 
+	[
+		{ 	
+			"name" : "Open UE4 Editor",
+			"job" : "%UEHOME%\\Engine\\Binaries\\Win64\\UE4Editor.exe", 
+			"category" : 1
+		},
+		{ 
+			"name" : "Generate VS Project Files", 
+			"job" : "cmd.exe /K \"%LAUNCHER%\\Engine\\Binaries\\Win64\\UnrealVersionSelector.exe\" /projectfiles %PROJECT%\\Titan_Twins_PT_2.uproject", 
+			"category" : 1 
+		},
+		{ 
+			"name" : "Open UE4 Styleguide",
+			"job" : "explorer \"https://github.com/Allar/ue4-style-guide\"",
+			"category" : 1
+		}
+	]
+}
