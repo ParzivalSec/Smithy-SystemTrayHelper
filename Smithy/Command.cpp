@@ -71,15 +71,37 @@ void InPlaceStringReplace(std::string& subject, const std::string& token, const 
 	}
 }
 
+void FindVarsToReplace(std::vector<std::string>& vars, std::string& subject, const std::string& delimiter)
+{
+	size_t pos = 0;
+	size_t pos_end = 0;
+	while ((pos = subject.find(delimiter, pos)) != std::string::npos)
+	{
+		pos_end = subject.find(delimiter, pos + 1);
+		if (pos_end != std::string::npos)
+			vars.push_back(subject.substr(pos, (pos_end - pos) + 1));
+		pos = pos_end + 1;
+	}
+}
+
 void smithy::cmd::SubstituteConfigParameters(const cfg::ConfigValues& settings, std::vector<Command>& commands)
 {
+	std::string delimiter = "%";
+	std::vector<std::string> variables;
 	for (Command& cmd : commands)
 	{
-		// TODO [LV] Make this more dynamic and less hardcoded with globally accessible config values
-		InPlaceStringReplace(cmd.job, "%UEHOME%", settings.UEHome);
-		InPlaceStringReplace(cmd.job, "%P4HOME%", settings.P4Home);
-		InPlaceStringReplace(cmd.job, "%PROJECT%", settings.ProjectHome);
-		InPlaceStringReplace(cmd.job, "%LAUNCHER%", settings.LauncherHome);
+		FindVarsToReplace(variables, cmd.job, delimiter);
+
+		for (const std::string& var : variables)
+		{
+			std::string varName = var.substr(delimiter.length(), (var.length() - delimiter.length() - 1));
+			cfg::ConfigSettingString* configValue = cfg::ConfigSettingString::FindSetting(varName);
+			if (configValue != nullptr)
+			{
+				InPlaceStringReplace(cmd.job, var, configValue->GetValue());
+			}
+		}
+		variables.clear();
 	}
 }
 

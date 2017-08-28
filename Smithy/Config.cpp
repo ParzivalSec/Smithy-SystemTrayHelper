@@ -5,6 +5,7 @@
 #include <string>
 #include <fstream>
 #include <rapidjson/document.h>
+#include <iostream>
 
 smithy::cfg::ConfigValues smithy::cfg::CheckConfigurationFile()
 {
@@ -49,30 +50,54 @@ void smithy::cfg::ParseConfig(const std::string& config, ConfigValues& configRes
 	// Parse the json DOM
 	rapidjson::Document dom;
 	dom.Parse(config.c_str());
-	rapidjson::Value& UEHome = dom["UE4Home"];
-	rapidjson::Value& P4Home = dom["P4Home"];
-	rapidjson::Value& ProjectHome = dom["ProjectHome"];
-	rapidjson::Value& LauncherHome = dom["LauncherHome"];
 
-	if (UEHome.GetStringLength() != 0)
+	for (auto& m : dom.GetObject())
 	{
-		configResult.configFlags |= CONFIG_UE_EXISTS;
-		configResult.UEHome = UEHome.GetString();
+		// TODO [LV]: Remove these dynamic allocations and create them in the scope of an enclosing ConfigSettings clas
+		ConfigSettingString* cVar = new ConfigSettingString(m.name.GetString(), m.value.GetString());
 	}
+} 
 
-	if (P4Home.GetStringLength() != 0)
-	{
-		configResult.configFlags |= CONFIG_P4_EXISTS;
-		configResult.P4Home = P4Home.GetString();
-	}
 
-	if (ProjectHome.GetStringLength() != 0)
+smithy::cfg::ConfigSettingString::ConfigSettingString(std::string name, std::string value)
+	: m_next(nullptr)
+	, m_name(name)
+	, m_value(value)
+{
+	if (head)
 	{
-		configResult.ProjectHome = ProjectHome.GetString();
+		tail->m_next = this;
+		tail = this;
 	}
+	else
+	{
+		head = this;
+		tail = this;
+	}
+}
 
-	if (LauncherHome.GetStringLength() != 0)
+smithy::cfg::ConfigSettingString& smithy::cfg::ConfigSettingString::operator=(std::string value)
+{
+	m_value = value;
+	return *this;
+}
+
+inline smithy::cfg::ConfigSettingString::operator std::string(void) const
+{
+	return m_value;
+}
+
+smithy::cfg::ConfigSettingString* smithy::cfg::ConfigSettingString::FindSetting(std::string name)
+{
+	smithy::cfg::ConfigSettingString* tmp = head;
+	while (tmp != nullptr)
 	{
-		configResult.LauncherHome = LauncherHome.GetString();
+		if (tmp->m_name == name)
+		{
+			return tmp;
+		}
+
+		tmp = tmp->m_next;
 	}
+	return nullptr;
 }

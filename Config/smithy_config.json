@@ -1,6 +1,7 @@
 {
-	"UE4Home" : "C:\\Program Files\\Epic Games\\UE_4.17",
-	"LauncherHome" : "C:\\Program Files (x86)\\Epic Games\\Launcher",
-	"P4Home" : "Perforce",
-	"ProjectHome" : "D:\\Perforce_Workspaces\\Titan_Twins_PT_2\\mainline"
+	"UE4HOME" : "C:\\Program Files\\Epic Games\\UE_4.17",
+	"LAUNCHER" : "C:\\Program Files (x86)\\Epic Games\\Launcher",
+	"P4HOME" : "C:\\Program Files\\Perforce",
+	"PROJECT" : "D:\\Perforce_Workspaces\\UE4_TitanTwins_PT\\mainline\\TitanTwinsPT",
+	"PROJECT_NAME" : "TitanTwinsPT"
 }

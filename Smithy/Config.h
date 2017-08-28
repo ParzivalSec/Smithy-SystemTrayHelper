@@ -5,12 +5,26 @@ namespace smithy
 {
 	namespace cfg
 	{
+		class ConfigSettingString
+		{
+		public: 
+			ConfigSettingString(std::string name, std::string value);
+			ConfigSettingString& operator=(std::string value);
+			inline operator std::string(void) const;
+			inline std::string& GetValue(void) { return m_value; }
+
+			static ConfigSettingString* FindSetting(std::string name);
+			
+		private:
+			ConfigSettingString* m_next;
+			std::string m_name;
+			std::string m_value;
+		};
+
 		enum CONFIG_STATE
 		{
 			INVALID_CONFIG =	0x0,
 			CONFIG_EXISTS =		0x1,
-			CONFIG_UE_EXISTS =	0x2,
-			CONFIG_P4_EXISTS =	0x4,
 		};
 
 		struct ConfigValues
@@ -28,4 +42,10 @@ namespace smithy
 		ConfigValues CheckConfigurationFile();
 		void ParseConfig(const std::string& config, ConfigValues& configResult);
 	}
+}
+
+namespace
+{
+	smithy::cfg::ConfigSettingString* head = nullptr;
+	smithy::cfg::ConfigSettingString* tail = nullptr;
 }

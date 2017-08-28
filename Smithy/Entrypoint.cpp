@@ -20,6 +20,7 @@ void minimize();
 void restore();
 void InitNotifyIconData();
 std::vector<smithy::cmd::Command> commands;
+smithy::cfg::ConfigValues settings;
 
 
 int WINAPI WinMain(HINSTANCE hThisInstance,
@@ -53,7 +54,7 @@ int WINAPI WinMain(HINSTANCE hThisInstance,
 	}
 
 	// Check for main config file and load application homes if exist
-	smithy::cfg::ConfigValues settings = smithy::cfg::CheckConfigurationFile();
+	settings = smithy::cfg::CheckConfigurationFile();
 	if (settings.configFlags & smithy::cfg::CONFIG_EXISTS)
 	{
 		if (smithy::cmd::ParseCommandsFile(settings.configPath, commands))
@@ -117,10 +118,13 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 			ShowWindow(Hwnd, SW_HIDE);
 			Shell_NotifyIcon(NIM_ADD, &notifyIconData);
 			break;
-		case WM_CREATE:
+		case WM_CREATE:;
 			ShowWindow(Hwnd, SW_HIDE);
-			Hmenu = smithy::CreateContextMenu(commands);
-			AppendMenu(Hmenu, MF_STRING, ID_TRAY_EXIT, TEXT("Exit the demo"));
+			Hmenu = smithy::CreateContextMenu();
+			//AppendMenu(Hmenu, MF_GRAYED, NULL, TEXT(std::string("PROJECT in : " + settings.ProjectHome)).c_str());
+			AppendMenu(Hmenu, MF_SEPARATOR, NULL, nullptr);
+			smithy::AddMenuItems(Hmenu, commands);
+			AppendMenu(Hmenu, MF_STRING, ID_TRAY_EXIT, TEXT("Exit Smithy"));
 			break;
 		case WM_SYSCOMMAND:
 			switch (wParam & 0xFFF0)
