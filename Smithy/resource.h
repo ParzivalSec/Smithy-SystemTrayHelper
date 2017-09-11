@@ -5,7 +5,8 @@
 #define ICO1                            101
 #define IDI_ICON1                       102
 #define ID_TRAY_APP_ICON                1001
-#define ID_TRAY_EXIT                    1002
+#define ID_SHOW_CONFIG					1002
+#define ID_TRAY_EXIT                    1003
 #define WM_SYSICON						(WM_USER + 1)
 
 // Next default values for new objects

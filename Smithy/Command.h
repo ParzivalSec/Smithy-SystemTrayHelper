@@ -14,8 +14,8 @@ namespace smithy
 		{
 			std::string name;
 			std::string job;
-			uint32_t cmdId;
-			uint8_t category;
+			size_t cmdId;
+			std::string category;
 		};
 
 		bool ParseCommandsFile(const std::string& configPath, std::vector<Command>& commands);

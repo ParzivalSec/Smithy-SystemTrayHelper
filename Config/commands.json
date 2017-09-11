@@ -4,27 +4,32 @@
 		{ 	
 			"name" : "Open UE4 Editor",
 			"job" : "%UE4HOME%\\Engine\\Binaries\\Win64\\UE4Editor.exe", 
-			"category" : 1
+			"category" : "Unreal Engine"
 		},
 		{ 	
 			"name" : "Open Project",
 			"job" : "%UE4HOME%\\Engine\\Binaries\\Win64\\UE4Editor.exe %PROJECT%\\%PROJECT_NAME%.uproject", 
-			"category" : 1
+			"category" : "Unreal Engine"
 		},
 		{ 
 			"name" : "Generate VS Project Files", 
 			"job" : "\"%LAUNCHER%\\Engine\\Binaries\\Win64\\UnrealVersionSelector.exe\" /projectfiles %PROJECT%\\%PROJECT_NAME%.uproject", 
-			"category" : 1 
+			"category" : "Unreal Engine" 
 		},
 		{ 
 			"name" : "Open UE4 Styleguide",
 			"job" : "explorer \"https://github.com/Allar/ue4-style-guide\"",
-			"category" : 1
+			"category" : "Unreal Engine"
 		},
 		{
 			"name" : "Open P4V",
 			"job" : "%P4HOME%\\p4v.exe",
-			"category" : 2
+			"category" : "Perforce"
+		},
+		{ 
+			"name" : "Additional Stuff", 
+			"job" : "\"%LAUNCHER%\\Engine\\Binaries\\Win64\\UnrealVersionSelector.exe\" /projectfiles %PROJECT%\\%PROJECT_NAME%.uproject", 
+			"category" : "" 
 		}
 	]
 }

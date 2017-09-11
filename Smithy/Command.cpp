@@ -52,12 +52,12 @@ void smithy::cmd::ParseCommands(const std::string& commandsContent, std::vector<
 		commands.push_back({ dom["commands"][i]["name"].GetString(),
 			dom["commands"][i]["job"].GetString(),
 			ID_TRAY_EXIT + (i + 1), 
-			static_cast<uint8_t>(dom["commands"][i]["category"].GetInt())
+			(dom["commands"][i]["category"].GetString())
 		});
 	}
 
 	std::sort(commands.begin(), commands.end(), [](const smithy::cmd::Command& lhs, const smithy::cmd::Command& rhs) {
-		return lhs.category < rhs.category;
+		return lhs.category.compare(rhs.category) > 0;
 	});
 }
 

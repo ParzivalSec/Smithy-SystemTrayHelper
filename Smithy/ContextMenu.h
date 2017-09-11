@@ -6,5 +6,5 @@
 namespace smithy
 {
 	HMENU CreateContextMenu(void);
-	void AddMenuItems(HMENU menu, const std::vector<cmd::Command>& commands);
+	void AddMenuItems(cfg::ConfigValues& settings, HMENU menu, const std::vector<cmd::Command>& commands);
 }

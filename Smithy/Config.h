@@ -11,6 +11,7 @@ namespace smithy
 			ConfigSettingString(std::string name, std::string value);
 			ConfigSettingString& operator=(std::string value);
 			inline operator std::string(void) const;
+			inline std::string& GetName(void) { return m_name; }
 			inline std::string& GetValue(void) { return m_value; }
 
 			static ConfigSettingString* FindSetting(std::string name);

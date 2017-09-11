@@ -118,13 +118,24 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 			ShowWindow(Hwnd, SW_HIDE);
 			Shell_NotifyIcon(NIM_ADD, &notifyIconData);
 			break;
-		case WM_CREATE:;
-			ShowWindow(Hwnd, SW_HIDE);
-			Hmenu = smithy::CreateContextMenu();
-			//AppendMenu(Hmenu, MF_GRAYED, NULL, TEXT(std::string("PROJECT in : " + settings.ProjectHome)).c_str());
-			AppendMenu(Hmenu, MF_SEPARATOR, NULL, nullptr);
-			smithy::AddMenuItems(Hmenu, commands);
-			AppendMenu(Hmenu, MF_STRING, ID_TRAY_EXIT, TEXT("Exit Smithy"));
+		case WM_CREATE:
+			{
+				ShowWindow(Hwnd, SW_HIDE);
+				Hmenu = smithy::CreateContextMenu();
+				smithy::cfg::ConfigSettingString* configValue = smithy::cfg::ConfigSettingString::FindSetting("PROJECT");
+				if (configValue)
+				{
+					AppendMenu(Hmenu, MF_GRAYED, ID_SHOW_CONFIG, configValue->GetValue().c_str());
+				}
+				else
+				{
+					AppendMenu(Hmenu, MF_GRAYED, ID_SHOW_CONFIG, TEXT("Smithy - A motivating fairy in your PC!"));
+				}
+
+				AppendMenu(Hmenu, MF_SEPARATOR, NULL, nullptr);
+				smithy::AddMenuItems(settings, Hmenu, commands);
+				AppendMenu(Hmenu, MF_STRING, ID_TRAY_EXIT, TEXT("Exit Smithy"));
+			}
 			break;
 		case WM_SYSCOMMAND:
 			switch (wParam & 0xFFF0)
@@ -165,9 +176,15 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 						smithy::cmd::ExecuteCommand(cmd);
 					}
 				}
+
+				if (clicked == ID_SHOW_CONFIG)
+				{
+					// TODO [LV]: We can implement a display / and event an edit of confug values
+				}
 				
 				if (clicked == ID_TRAY_EXIT)
 				{
+					MessageBox(Hwnd, TEXT("So long and thanks for all the fish! :)"), NULL, MB_OK);
 					Shell_NotifyIcon(NIM_DELETE, &notifyIconData);
 					PostQuitMessage(0);
 				}
